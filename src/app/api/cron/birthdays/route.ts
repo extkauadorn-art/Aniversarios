@@ -1,0 +1,1 @@
+import {runDaily} from "@/lib/send";import {NextRequest,NextResponse} from "next/server";export async function GET(req:NextRequest){if(req.headers.get("authorization")!==`Bearer ${process.env.CRON_SECRET}`)return NextResponse.json({erro:"Não autorizado"},{status:401});const results=await runDaily();return NextResponse.json({processed:results.length,results})}
