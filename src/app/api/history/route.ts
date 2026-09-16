@@ -1,0 +1,1 @@
+import {prisma} from "@/lib/prisma";import {NextRequest,NextResponse} from "next/server";export async function GET(req:NextRequest){const status=req.nextUrl.searchParams.get("status") as "ENVIADO"|"PENDENTE"|"ERRO"|"IGNORADO"|null;return NextResponse.json(await prisma.birthdaySend.findMany({where:{status:status||undefined},include:{employee:true},orderBy:{createdAt:"desc"}}))}
