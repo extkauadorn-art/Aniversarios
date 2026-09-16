@@ -1,55 +1,92 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+generator client {
+  provider = "prisma-client-js"
+}
 
-enum SendStatus { ENVIADO PENDENTE ERRO IGNORADO }
-enum LeapDayPolicy { FEB_28 MAR_01 ONLY_LEAP_YEAR }
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
-model User { id String @id @default(cuid()) name String? email String @unique passwordHash String createdAt DateTime @default(now()) }
+enum SendStatus {
+  ENVIADO
+  PENDENTE
+  ERRO
+  IGNORADO
+}
+
+enum LeapDayPolicy {
+  FEB_28
+  MAR_01
+  ONLY_LEAP_YEAR
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
 model Employee {
-  id String @id @default(cuid())
-  nome String
-  email String? @unique
-  dataNascimento DateTime @db.Date
-  area String?
-  equipe String?
-  cargo String?
-  telefone String?
-  ativo Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  sends BirthdaySend[]
+  id             String         @id @default(cuid())
+  nome           String
+  email          String?        @unique
+  dataNascimento DateTime       @db.Date
+  area           String?
+  equipe         String?
+  cargo          String?
+  telefone       String?
+  ativo          Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  sends          BirthdaySend[]
+
   @@index([ativo])
 }
+
 model BirthdaySend {
-  id String @id @default(cuid())
-  employeeId String
-  employee Employee @relation(fields:[employeeId], references:[id], onDelete:Cascade)
-  dataAniversario DateTime @db.Date
-  anoReferencia Int
-  emailDestino String?
-  assunto String
-  mensagem String @db.Text
-  status SendStatus @default(PENDENTE)
-  automatico Boolean @default(true)
-  idempotencyKey String? @unique
-  sentAt DateTime?
-  errorMessage String?
-  createdAt DateTime @default(now())
+  id               String     @id @default(cuid())
+  employeeId       String
+  employee         Employee   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  dataAniversario  DateTime   @db.Date
+  anoReferencia    Int
+  emailDestino     String?
+  assunto          String
+  mensagem         String     @db.Text
+  status           SendStatus @default(PENDENTE)
+  automatico       Boolean    @default(true)
+  idempotencyKey   String?    @unique
+  sentAt           DateTime?
+  errorMessage     String?
+  createdAt        DateTime   @default(now())
+
   @@index([status, createdAt])
 }
+
 model Settings {
-  id String @id @default("singleton")
-  companyName String @default("Line Haul")
-  teamName String @default("Equipe Line Haul")
-  senderEmail String @default("Aniversários <aniversarios@example.com>")
-  replyTo String?
-  sendTime String @default("09:00")
-  automaticEnabled Boolean @default(false)
-  adminReminder Boolean @default(false)
-  adminEmail String?
-  leapDayPolicy LeapDayPolicy @default(FEB_28)
-  subjectTemplate String @default("🎉 Feliz aniversário, {{nome}}!")
-  bodyTemplate String @db.Text
-  updatedAt DateTime @updatedAt
+  id               String        @id @default("singleton")
+  companyName      String        @default("Line Haul")
+  teamName         String        @default("Equipe Line Haul")
+  senderEmail      String        @default("Aniversários <aniversarios@example.com>")
+  replyTo          String?
+  sendTime         String        @default("09:00")
+  automaticEnabled Boolean       @default(false)
+  adminReminder    Boolean       @default(false)
+  adminEmail       String?
+  leapDayPolicy    LeapDayPolicy @default(FEB_28)
+  subjectTemplate  String        @default("🎉 Feliz aniversário, {{nome}}!")
+  bodyTemplate     String        @db.Text
+  updatedAt        DateTime      @updatedAt
 }
-model AuditLog { id String @id @default(cuid()) action String entity String? entityId String? details Json? createdAt DateTime @default(now()) @@index([createdAt]) }
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  entity    String?
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
