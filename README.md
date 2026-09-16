@@ -57,16 +57,15 @@ Gere segredos com `openssl rand -base64 32`. Configure no painel do provedor, e 
 
 ### Supabase e Vercel
 
-Para produção com Supabase, configure `DATABASE_URL` com a URL do **transaction-mode
-pooler**. Essa é a conexão utilizada normalmente pelo Prisma Client durante as
-requisições da aplicação. Configure `DIRECT_URL` com a URL do **session-mode pooler**;
-o Prisma usa essa conexão para operações que precisam de uma sessão estável, como
-migrations.
+Em produção com Supabase, defina `DATABASE_URL` com a URL do **transaction-mode
+pooler**. O Prisma Client utiliza essa conexão no funcionamento normal da aplicação.
+Defina `DIRECT_URL` com a URL do **session-mode pooler**, utilizada pelo Prisma em
+operações que precisam de uma sessão estável, como migrations.
 
-Cadastre as duas variáveis no projeto da Vercel para os ambientes relevantes
-(Production, Preview e Development, conforme sua política). Copie os valores exibidos
-pelo painel do Supabase e mantenha usuário, senha, host e chaves somente nos gerenciadores
-de variáveis de ambiente. Nenhuma URL ou credencial real do Supabase deve ser versionada.
+Configure ambas as variáveis nos ambientes aplicáveis da Vercel (Production, Preview
+e Development). Copie os valores fornecidos pelo painel do Supabase e mantenha usuário,
+senha, host e chaves apenas nos gerenciadores de variáveis de ambiente. Nunca versione
+uma URL ou credencial real do Supabase.
 
 ## Banco, migration e seed
 
