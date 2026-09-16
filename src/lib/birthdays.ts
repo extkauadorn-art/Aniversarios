@@ -1,0 +1,5 @@
+import type { LeapDayPolicy } from "@prisma/client";
+export function isLeapYear(year:number){return year%4===0&&(year%100!==0||year%400===0)}
+export function matchesBirthday(birth:Date,today:Date,policy:LeapDayPolicy="FEB_28") { const bm=birth.getUTCMonth()+1, bd=birth.getUTCDate(), m=today.getUTCMonth()+1,d=today.getUTCDate(); if(bm===2&&bd===29&&!isLeapYear(today.getUTCFullYear())) return policy==="FEB_28"?(m===2&&d===28):policy==="MAR_01"?(m===3&&d===1):false; return bm===m&&bd===d; }
+export function renderTemplate(template:string, employee:{nome:string;area?:string|null;equipe?:string|null;dataNascimento:Date}) {const values:Record<string,string>={nome:employee.nome,area:employee.area||"",equipe:employee.equipe||"",dataAniversario:new Intl.DateTimeFormat("pt-BR",{timeZone:"UTC"}).format(employee.dataNascimento)}; return template.replace(/{{\s*(nome|area|equipe|dataAniversario)\s*}}/g,(_,key)=>values[key]);}
+export function validEmail(email?:string|null):email is string{return !!email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}

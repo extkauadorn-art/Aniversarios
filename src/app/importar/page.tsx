@@ -1,0 +1,1 @@
+import {Header} from "@/components/ui";import {Importer} from "@/components/importer";export default function Page(){return <><Header title="Importar colaboradores" description="O sistema reconhece automaticamente colunas e múltiplas abas."/><Importer/></>}

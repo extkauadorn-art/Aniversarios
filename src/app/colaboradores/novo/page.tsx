@@ -1,0 +1,1 @@
+import {Header} from "@/components/ui";import {EmployeeForm} from "@/components/employee-form";export default function Page(){return <><Header title="Novo colaborador" description="Preencha os dados do colaborador."/><EmployeeForm/></>}
